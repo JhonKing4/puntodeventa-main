@@ -43,6 +43,7 @@
           </ul>
         </div>
         <input type="color" id="colorle" onchange="cambiarLetra();" />
+        <input type="color" id="colorch" onchange="cambiarColor();" />
         <br>
         <select id="input-font" class="input" onchange="changeFontStyle (this);">
 
@@ -262,6 +263,10 @@
     //document.querySelector("a").style.color=selectValue;
     document.getElementById("category").style.color = selectValue;
   }
+  function cambiarColor() {
+      var selectValue = document.getElementById("colorch").value;
+      document.body.style.backgroundColor = selectValue;
+    }
   var changeFontStyle = function (font) {
       document.getElementById(
         "output-text").style.fontFamily

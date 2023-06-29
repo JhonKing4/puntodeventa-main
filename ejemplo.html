@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cambios</title>
+    <head>
+        <title>Ejemplo de Guardar Cambios</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+        </style>
+    </head>
+    
+    <body>
+        <h1>Configuración de Página</h1>
+    
+        <label for="colorInput">Color:</label>
+        <input type="color" id="colorInput" onchange="()=>{localStorage.setItem('color', color);window.location.href = window.location.href;}"><br><br>
+
+        <label for="colorLetraInput">Color de la Letra</label>
+        <input type="color" id="colorLetraInput"><br><br>
+
+        <label for="tipoLetraInput">Tipo de Letra:</label>
+        <select id="tipoLetraInput">
+            <option value="Arial">Arial</option>
+            <option value="Verdana">Verdana</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="cursive">cursive</option>
+        </select><br><br>
+    
+        <button onclick="guardarCambios()">Guardar Cambios</button>
+    
+        <script>
+            // Recuperar los cambios al cargar la página
+            window.onload = function () {
+                var colorGuardado = localStorage.getItem("color");
+                var tipoLetraGuardado = localStorage.getItem("tipoLetra");
+                var colorLetra = localStorage.getItem("colorLetra");
+    
+                if (colorGuardado) {
+                    document.getElementById("colorInput").value = colorGuardado;
+                    document.body.style.backgroundColor = colorGuardado;
+                }
+    
+                if (tipoLetraGuardado) {
+                    document.getElementById("tipoLetraInput").value = tipoLetraGuardado;
+                    document.body.style.fontFamily = tipoLetraGuardado;
+                }
+                if (colorLetra)
+                {
+                    document.getElementById("colorLetraInput").value=colorLetra;
+                    document.body.style.color = colorLetra;
+                }
+            }
+    
+            // Guardar los cambios al hacer clic en el botón
+            function guardarCambios() {
+                var color = document.getElementById("colorInput").value;
+                var tipoLetra = document.getElementById("tipoLetraInput").value;
+                var colorLetra = document.getElementById("colorLetraInput").value; 
+
+                localStorage.setItem("color", color);
+                localStorage.setItem("tipoLetra", tipoLetra);
+                localStorage.setItem("colorLetra", colorLetra);
+                window.location.href = window.location.href;
+            }
+        </script>
+    </body>
+    
+</html>
