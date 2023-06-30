@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Página de Producto - Tu Tienda Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+    <header>
+        <!-- Barra de navegación -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Tu Tienda Online</a>
+            <!-- Enlaces adicionales en la barra de navegación -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Iniciar sesión</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Registrarse</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <!-- Imágenes del producto -->
+                <div id="productImages" class="carousel slide" data-ride="carousel">
+                    <ol class="carousel-indicators"></ol>
+                    <div class="carousel-inner"></div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <!-- Detalles del producto -->
+                <h1 id="productName"></h1>
+                <p id="productDescription"></p>
+                <ul id="productFeatures"></ul>
+                <h2 id="productPrice"></h2>
+                <div id="productOptions"></div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <!-- Pie de página -->
+        <p>Tu Tienda Online &copy; 2023. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Obtener el ID del producto desde la URL
+            var productId = getProductIdFromURL();
+
+            // Obtener los detalles del producto desde la API
+            $.ajax({
+                url: 'https://api.example.com/products/' + productId,
+                method: 'GET',
+                success: function (product) {
+                    // Mostrar los detalles del producto en la página
+                    $('#productName').text(product.name);
+                    $('#productDescription').text(product.description);
+
+                    // Mostrar las imágenes del producto en el carrusel
+                    var productImages = $('#productImages');
+                    var carouselIndicators = productImages.find('.carousel-indicators');
+                    var carouselInner = productImages.find('.carousel-inner');
+
+                    product.images.forEach(function (image, index) {
+                        var carouselIndicator = $('<li>').attr('data-target', '#productImages').attr('data-slide-to', index).addClass(index === 0 ? 'active' : '');
+                        var carouselItem = $('<div>').addClass('carousel-item').append($('<img>').addClass('d-block w-100').attr('src', image));
+
+                        carouselIndicators.append(carouselIndicator);
+                        carouselInner.append(carouselItem);
+                    });
+
+                    // Mostrar la primera imagen como activa
+                    carouselInner.find('.carousel-item').first().addClass('active');
+                    carouselIndicators.find('li').first().addClass('active');
+
+                    // Mostrar las características del producto
+                    var productFeatures = $('#productFeatures');
+
+                    product.features.forEach(function (feature) {
+                        var featureItem = $('<li>').text(feature);
+                        productFeatures.append(featureItem);
+                    });
+
+                    // Mostrar el precio del producto
+                    $('#productPrice').text('Precio: $' + product.price);
+
+                    // Mostrar las opciones de compra del producto
+                    var productOptions = $('#productOptions');
+
+                    product.options.forEach(function (option) {
+                        var optionItem = $('<div>').addClass('form-check');
+                        var input = $('<input>').addClass('form-check-input').attr('type', 'radio').attr('name', 'productOption').attr('id', option.id);
+                        var label = $('<label>').addClass('form-check-label').attr('for', option.id).text(option.name);
+
+                        optionItem.append(input, label);
+                        productOptions.append(optionItem);
+                    });
+                },
+                error: function () {
+                    console.log('Error al cargar los detalles del producto.');
+                }
+            });
+
+            function getProductIdFromURL() {
+                var url = window.location.href;
+                var parts = url.split('/');
+                return parts[parts.length - 1];
+            }
+        });
+
+    </script>
+</body>
+
+</html>

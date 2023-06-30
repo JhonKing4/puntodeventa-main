@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Tu Tienda Online</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <header>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Tu Tienda Online</a>
+      <!-- Enlaces adicionales en la barra de navegación -->
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Iniciar sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Registrarse</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./Productos.html">Productos</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- Carrusel de productos destacados -->
+    <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
+      <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+      </ol>
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img class="d-block w-100" src="product1.jpg" alt="Producto 1">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Oferta especial</h5>
+            <p>Ahorra un 20% en el Producto 1</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100" src="product2.jpg" alt="Producto 2">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>¡Nuevo lanzamiento!</h5>
+            <p>Descubre el Producto 2, nuestra última adición</p>
+          </div>
+        </div>
+        <div class="carousel-item">
+          <img class="d-block w-100" src="product3.jpg" alt="Producto 3">
+          <div class="carousel-caption d-none d-md-block">
+            <h5>Envío gratis</h5>
+            <p>Compra el Producto 3 y disfruta del envío gratuito</p>
+          </div>
+        </div>
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Anterior</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Siguiente</span>
+      </a>
+    </div>
+
+    <!-- Sección de productos destacados -->
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <img class="card-img-top" src="product4.jpg" alt="Producto 4">
+          <div class="card-body">
+            <h5 class="card-title">Producto 4</h5>
+            <p class="card-text">Descripción del producto 4.</p>
+            <a href="#" class="btn btn-primary">Comprar</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="card mb-4">
+          <img class="card-img-top" src="product5.jpg" alt="Producto 5">
+          <div class="card-body">
+            <h5 class="card-title">Producto 5</h5>
+            <p class="card-text">Descripción del producto 5.</p>
+            <a href="#" class="btn btn-primary">Comprar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Sección de categorías -->
+    <h2 class="mb-4">Categorías populares</h2>
+    <div class="row">
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img class="card-img-top" src="category1.jpg" alt="Categoría 1">
+          <div class="card-body">
+            <h5 class="card-title">Categoría 1</h5>
+            <a href="#" class="btn btn-primary">Explorar</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img class="card-img-top" src="category2.jpg" alt="Categoría 2">
+          <div class="card-body">
+            <h5 class="card-title">Categoría 2</h5>
+            <a href="#" class="btn btn-primary">Explorar</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card mb-4">
+          <img class="card-img-top" src="category3.jpg" alt="Categoría 3">
+          <div class="card-body">
+            <h5 class="card-title">Categoría 3</h5>
+            <a href="#" class="btn btn-primary">Explorar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3">
+    <!-- Pie de página -->
+    <p>Tu Tienda Online &copy; 2023. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
+
+
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->

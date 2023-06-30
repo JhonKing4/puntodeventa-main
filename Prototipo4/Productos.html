@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Catálogo de Productos - Tu Tienda Online</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+  integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+<body>
+  <header>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Tu Tienda Online</a>
+      <!-- Enlaces adicionales en la barra de navegación -->
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Iniciar sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Registrarse</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h1>Catálogo de Productos</h1>
+    <div id="productFilters">
+      <!-- Filtros de categorías y búsqueda -->
+      <div class="form-group">
+        <label for="categoryFilter">Categoría:</label>
+        <select class="form-control" id="categoryFilter">
+          <!-- Opciones de categorías se cargarán dinámicamente -->
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="searchInput">Búsqueda:</label>
+        <input type="text" class="form-control" id="searchInput" placeholder="Buscar productos...">
+      </div>
+    </div>
+
+    <div id="productList" class="row">
+      <!-- Los productos se cargarán dinámicamente aquí -->
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3">
+    <!-- Pie de página -->
+    <p>Tu Tienda Online &copy; 2023. Todos los derechos reservados.</p>
+  </footer>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+    $(document).ready(function() {
+  // Obtener las categorías disponibles desde la API
+  $.ajax({
+    url: 'https://api.example.com/categories',
+    method: 'GET',
+    success: function(response) {
+      var categoryFilter = $('#categoryFilter');
+
+      // Limpiar las opciones previas de categorías
+      categoryFilter.empty();
+
+      // Agregar una opción para mostrar todos los productos
+      categoryFilter.append($('<option>').text('Todos').val('all'));
+
+      // Agregar las opciones de categorías desde la API
+      response.forEach(function(category) {
+        categoryFilter.append($('<option>').text(category.name).val(category.id));
+      });
+    },
+    error: function() {
+      console.log('Error al cargar las categorías.');
+    }
+  });
+
+  // Obtener los productos desde la API
+  $.ajax({
+    url: 'https://api.example.com/products',
+    method: 'GET',
+    success: function(response) {
+      var productList = $('#productList');
+
+      // Limpiar el contenido previo de la lista de productos
+      productList.empty();
+
+      // Verificar si no hay productos disponibles
+      if (response.length === 0) {
+        productList.append('<p>No hay productos disponibles.</p>');
+        return;
+      }
+
+      // Mostrar los productos en la lista
+      response.forEach(function(product) {
+        var productItem = $('<div>').addClass('col-md-4 mb-4');
+        var card = $('<div>').addClass('card h-100');
+        var image = $('<img>').addClass('card-img-top').attr('src', product.image);
+        var cardBody = $('<div>').addClass('card-body');
+        var title = $('<h5>').addClass('card-title').text(product.name);
+        var price = $('<p>').addClass('card-text').text('Precio: $' + product.price);
+
+        cardBody.append(title, price);
+        card.append(image, cardBody);
+        productItem.append(card);
+        productList.append(productItem);
+      });
+    },
+    error: function() {
+      console.log('Error al cargar los productos.');
+    }
+  });
+
+  // Agregar eventos para filtrar y buscar productos
+  $('#categoryFilter').on('change', function() {
+    var selectedCategory = $(this).val();
+
+    // Realizar la lógica para filtrar productos por categoría seleccionada
+  });
+
+  $('#searchInput').on('input', function() {
+    var searchQuery = $(this).val();
+
+    // Realizar la lógica para buscar productos por consulta de búsqueda
+  });
+});
+
+  </script>
+</body>
+</html>

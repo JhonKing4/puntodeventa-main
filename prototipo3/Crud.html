@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Panel de Administración - Tu Tienda Online</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <header>
+        <!-- Barra de navegación -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">Tu Tienda Online</a>
+            <!-- Enlaces adicionales en la barra de navegación -->
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./index3.html">Cerrar sesión</a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <!-- Panel de administración -->
+        <div class="my-4">
+            <h2>Panel de Administración</h2>
+            <div id="productList">
+                <!-- La lista de productos se cargará dinámicamente aquí -->
+            </div>
+            <div class="text-right mt-4">
+                <button id="addProductButton" class="btn btn-primary">Agregar Producto</button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-white text-center py-3">
+        <!-- Pie de página -->
+        <p>Tu Tienda Online &copy; 2023. Todos los derechos reservados.</p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Obtener la lista de productos desde la API
+        $.ajax({
+            url: 'https://api.example.com/products',
+            method: 'GET',
+            success: function (response) {
+                var productList = $('#productList');
+
+                // Limpiar el contenido previo de la lista de productos
+                productList.empty();
+
+                // Verificar si no hay productos disponibles
+                if (response.length === 0) {
+                    productList.append('<p>No hay productos disponibles.</p>');
+                    return;
+                }
+
+                // Mostrar la lista de productos
+                response.forEach(function (product) {
+                    var productItem = $('<div>').addClass('card mb-4');
+                    var cardBody = $('<div>').addClass('card-body');
+                    var cardTitle = $('<h5>').addClass('card-title').text(product.name);
+                    var cardText = $('<p>').addClass('card-text').text('Precio: $' + product.price);
+
+                    var editButton = $('<button>').addClass('btn btn-primary mr-2').text('Editar');
+                    var deleteButton = $('<button>').addClass('btn btn-danger').text('Eliminar');
+
+                    // botones de editar y eliminar
+                    editButton.click(function () {
+                        editProduct(product.id);
+                    });
+
+                    deleteButton.click(function () {
+                        deleteProduct(product.id);
+                    });
+
+                    cardBody.append(cardTitle, cardText, editButton, deleteButton);
+                    productItem.append(cardBody);
+                    productList.append(productItem);
+                });
+            },
+            error: function () {
+                console.log('Error al cargar la lista de productos.');
+            }
+        });
+
+        // Agregar producto
+        $('#addProductButton').click(function () {
+            // Realizar acciones necesarias para agregar un nuevo producto
+            console.log('Agregar nuevo producto.');
+        });
+
+        // Editar producto
+        function editProduct(productId) {
+            // Realizar acciones necesarias para editar el producto con el ID especificado
+            console.log('Editar producto con ID: ' + productId);
+        }
+
+        // Eliminar producto
+        function deleteProduct(productId) {
+            // Realizar acciones necesarias para eliminar el producto con el ID especificado
+            console.log('Eliminar producto con ID: ' + productId);
+        }
+
+    </script>
+</body>
+
+</html>
