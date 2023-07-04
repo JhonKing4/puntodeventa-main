@@ -78,16 +78,19 @@
       productCard.classList.add('col-md-4', 'product-card');
 
       // Crear la estructura de la tarjeta de producto con los datos obtenidos
-      productCard.innerHTML = `
-        <div class="card">
-          <img src="${producto.imagenProducto}" class="card-img-top" alt="${producto.nombreProducto}">
-          <div class="card-body">
-            <h5 class="card-title">${producto.nombreProducto}</h5>
-            <p class="card-text">${producto.descripcion}</p>
-            <p class="card-text">Precio: $${producto.precio}</p>
-          </div>
-        </div>
-      `;
+      const cardHTML = `
+    <div class="card">
+      <img src="${producto.imagenProducto}" class="card-img-top img-fluid" alt="${producto.nombreProducto}">
+      <div class="card-body">
+        <h5 class="card-title">${producto.nombreProducto}</h5>
+        <p class="card-text">${producto.descripcion}</p>
+        <p class="card-text">Precio: $${producto.precio}</p>
+      </div>
+    </div>
+  `;
+
+      // Asignar el HTML generado a la tarjeta de producto
+      productCard.innerHTML = cardHTML;
 
       // Agregar la tarjeta de producto al contenedor de la lista
       productList.appendChild(productCard);
@@ -99,9 +102,7 @@
       fetch('https://localhost:7292/api/Producto')
         .then(response => response.json())
         .then(data => {
-          // Verificar si la respuesta de la API indica éxito y contiene el campo "resultado" como un array
           if (data.isExistoso && Array.isArray(data.resultado)) {
-            // Iterar sobre los productos obtenidos y llamar a la función agregarProducto para cada uno
             data.resultado.forEach(producto => {
               agregarProducto(producto);
             });
@@ -116,6 +117,7 @@
 
     // Llamar a la función obtenerProductos para cargar los productos al cargar la página
     window.addEventListener('load', obtenerProductos);
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
