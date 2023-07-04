@@ -2,100 +2,125 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catálogo de Productos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catálogo de Productos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 <style>
-    footer {
-        margin-top: 20px;
-        position: static;
+  footer {
+    margin-top: 20px;
+    position: static;
+  }
 
-    }
+  #productList {
+    margin-top: 20px;
+  }
 
-    #productList {
-        margin-top: 20px;
-    }
+  .product-card {
+    margin-bottom: 20px;
+  }
 
-    .product-card {
-        margin-bottom: 20px;
-    }
-
-    .product-card .card-img-top {
-        height: 200px;
-        object-fit: cover;
-    }
+  .product-card .card-img-top {
+    height: 200px;
+    object-fit: cover;
+  }
 </style>
 
 <body>
-    <header>
-        <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Tu Tienda Online</a>
-            <!-- Enlaces en la barra de navegación -->
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Iniciar sesión</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Registrarse</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+  <header>
+    <!-- Barra de navegación -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Tu Tienda Online</a>
+      <!-- Enlaces en la barra de navegación -->
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Iniciar sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Registrarse</a>
+        </li>
+      </ul>
+    </nav>
+  </header>
 
-    <main class="container">
-        <!-- Filtro de categorías -->
-        <div class="my-4">
-            <h2>Filtrar por Categoría</h2>
-            <div class="btn-group" role="group">
-                <button type="button" class="btn btn-secondary">Todos</button>
-                <button type="button" class="btn btn-secondary">Categoría 1</button>
-                <button type="button" class="btn btn-secondary">Categoría 2</button>
-                <button type="button" class="btn btn-secondary">Categoría 3</button>
-            </div>
+  <main class="container">
+    <!-- Filtro de categorías -->
+    <div class="my-4">
+      <h2>Filtrar por Categoría</h2>
+      <div class="btn-group" role="group">
+        <button type="button" class="btn btn-secondary">Todos</button>
+        <button type="button" class="btn btn-secondary">Categoría 1</button>
+        <button type="button" class="btn btn-secondary">Categoría 2</button>
+        <button type="button" class="btn btn-secondary">Categoría 3</button>
+      </div>
+    </div>
+
+    <!-- Lista de productos -->
+    <div id="productList" class="row">
+      <!-- Los productos se cargarán dinámicamente aquí -->
+    </div>
+  </main>
+
+  <footer class="bg-dark text-white text-center py-3">
+    <p>Tu Tienda Online &copy; 2023. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // Función para agregar productos al DOM
+    function agregarProducto(producto) {
+      // Obtener el contenedor de la lista de productos
+      const productList = document.getElementById('productList');
+
+      // Crear un nuevo elemento de tarjeta de producto
+      const productCard = document.createElement('div');
+      productCard.classList.add('col-md-4', 'product-card');
+
+      // Crear la estructura de la tarjeta de producto con los datos obtenidos
+      productCard.innerHTML = `
+        <div class="card">
+          <img src="${producto.imagenProducto}" class="card-img-top" alt="${producto.nombreProducto}">
+          <div class="card-body">
+            <h5 class="card-title">${producto.nombreProducto}</h5>
+            <p class="card-text">${producto.descripcion}</p>
+            <p class="card-text">Precio: $${producto.precio}</p>
+          </div>
         </div>
+      `;
 
-        <!-- Lista de productos -->
-        <div id="productList" class="row">
-            <!-- Los productos se cargarán dinámicamente aquí -->
-        </div>
-    </main>
+      // Agregar la tarjeta de producto al contenedor de la lista
+      productList.appendChild(productCard);
+    }
 
-    <footer class="bg-dark text-white text-center py-3">
-
-        <p>Tu Tienda Online &copy; 2023. Todos los derechos reservados.</p>
-    </footer>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
-        crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
-            $(document).ready(function () {
-                var productList = $('#productList');
-                $.ajax({
-                    url: "https://localhost:7292/api/Producto/"
-                }).then(fuction(data).forEach(function (Producto) {
-                    var card = $('<div>').addClass('col-md-4 product-card');
-                        var cardInner = $('<div>').addClass('card mb-4');
-                        var cardImage = $('<img>').addClass('card-img-top').attr('src', Producto.imagenProducto);
-                        var cardBody = $('<div>').addClass('card-body');
-                        var cardTitle = $('<h5>').addClass('card-title').text(Producto.nombreProducto);
-                        var cardDescription = $('<p>').addClass('card-text').text(Producto.descripcion);
-                        var cardButton = $('<a>').addClass('btn btn-primary').attr('href', '#').text('Comprar');
-    
-                        cardBody.append(cardTitle, cardDescription, cardButton);
-                        cardInner.append(cardImage, cardBody);
-                        card.append(cardInner);
-                        productList.append(card);
-                    
-                })
-                )
-                
+    // Obtener los productos de la API y agregarlos al DOM
+    function obtenerProductos() {
+      // Realizar la petición a la API utilizando fetch
+      fetch('https://localhost:7292/api/Producto')
+        .then(response => response.json())
+        .then(data => {
+          // Verificar si la respuesta de la API indica éxito y contiene el campo "resultado" como un array
+          if (data.isExistoso && Array.isArray(data.resultado)) {
+            // Iterar sobre los productos obtenidos y llamar a la función agregarProducto para cada uno
+            data.resultado.forEach(producto => {
+              agregarProducto(producto);
             });
-        </script>
+          } else {
+            console.log('La respuesta de la API no contiene datos válidos:', data);
+          }
+        })
+        .catch(error => {
+          console.log('Error:', error);
+        });
+    }
+
+    // Llamar a la función obtenerProductos para cargar los productos al cargar la página
+    window.addEventListener('load', obtenerProductos);
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
 </body>
 
 </html>
