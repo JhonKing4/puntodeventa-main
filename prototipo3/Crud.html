@@ -1,108 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administración - Tu Tienda Online</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD de Productos</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
 </head>
 
 <body>
-    <header>
-        <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <a class="navbar-brand" href="#">Tu Tienda Online</a>
-            <!-- Enlaces en la barra de navegación -->
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="./index3.html">Cerrar sesión</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+  <div class="container mt-5">
+    <h1>CRUD de Productos</h1>
 
-    <main class="container">
-        <div class="my-4">
-            <h2>Panel de Administración</h2>
-            <div id="productList">
-                <!-- La lista de productos se cargará  aquí -->
-            </div>
-            <div class="text-right mt-4">
-                <button id="addProductButton" class="btn btn-primary">Agregar Producto</button>
-            </div>
-        </div>
-    </main>
+    <!-- Tabla para mostrar los productos -->
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Código de Barras</th>
+          <th>Número de Serie</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Impuestos</th>
+          <th>Descuento</th>
+          <th>Imagen</th>
+          <th>Stock</th>
+          <th>Fecha de Creación</th>
+          <th>Fecha de Actualización</th>
+          <th>Categoría</th>
+          <th>Marca</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="productosTableBody">
+        <!-- Los productos se cargarán dinámicamente aquí -->
+      </tbody>
+    </table>
+  </div>
 
-    <footer class="bg-dark text-white text-center py-3">
-        <p>Tu Tienda Online &copy; 2023. Todos los derechos reservados.</p>
-    </footer>
+  <script>
+    // Obtener la lista de productos desde la API
+    function obtenerProductos() {
+      fetch('https://localhost:7292/api/Producto')
+        .then(response => response.json())
+        .then(data => {
+          if (data.isExistoso) {
+            const productosTableBody = document.getElementById('productosTableBody');
+            productosTableBody.innerHTML = ''; // Limpiar la tabla antes de agregar los productos
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <script>
-        // Obtener la lista de productos desde la API
-        $.ajax({
-            url: 'https://api.example.com/products',
-            method: 'GET',
-            success: function (response) {
-                var productList = $('#productList');
+            data.resultado.forEach(producto => {
+              const row = `
+                <tr>
+                  <td>${producto.idProducto}</td>
+                  <td>${producto.codigoBarras}</td>
+                  <td>${producto.numSerie}</td>
+                  <td>${producto.nombreProducto}</td>
+                  <td>${producto.descripcion}</td>
+                  <td>${producto.precio}</td>
+                  <td>${producto.impuestos}</td>
+                  <td>${producto.descuento}</td>
+                  <td>${producto.imagenProducto}</td>
+                  <td>${producto.stock}</td>
+                  <td>${producto.fechaCreacion}</td>
+                  <td>${producto.fechaActualizacion}</td>
+                  <td>${producto.categoria.nombreCategoria}</td>
+                  <td>${producto.marca.nombreMarca}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${producto.idProducto})">Eliminar</button>
+                    
+                    <a class="btn btn-sm btn-success" href="editar.html?id=${producto.idProducto}">Editar</a>
+                  </td>
+                </tr>
+              `;
 
-                // Limpiar el contenido previo de la lista de productos
-                productList.empty();
+              productosTableBody.innerHTML += row;
+            });
+          } else {
+            console.log('La respuesta de la API no contiene datos válidos:', data);
+          }
+        })
+        .catch(error => {
+          console.log('Error:', error);
+        });
+    }
 
-                // Verificar si no hay productos disponibles
-                if (response.length === 0) {
-                    productList.append('<p>No hay productos disponibles.</p>');
-                    return;
-                }
-
-                // Mostrar la lista de productos
-                response.forEach(function (product) {
-                    var productItem = $('<div>').addClass('card mb-4');
-                    var cardBody = $('<div>').addClass('card-body');
-                    var cardTitle = $('<h5>').addClass('card-title').text(product.name);
-                    var cardText = $('<p>').addClass('card-text').text('Precio: $' + product.price);
-
-                    var editButton = $('<button>').addClass('btn btn-primary mr-2').text('Editar');
-                    var deleteButton = $('<button>').addClass('btn btn-danger').text('Eliminar');
-
-                    // botones de editar y eliminar
-                    editButton.click(function () {
-                        editProduct(product.id);
-                    });
-
-                    deleteButton.click(function () {
-                        deleteProduct(product.id);
-                    });
-
-                    cardBody.append(cardTitle, cardText, editButton, deleteButton);
-                    productItem.append(cardBody);
-                    productList.append(productItem);
-                });
-            },
-            error: function () {
-                console.log('Error al cargar la lista de productos.');
+    // Eliminar un producto por ID
+    function eliminarProducto(idProducto) {
+      if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        fetch(`https://localhost:7292/api/Producto/${idProducto}`, {
+          method: 'DELETE'
+        })
+          .then(response => response.json())
+          .then(data => {
+            if (data.isExistoso) {
+              // Actualizar la tabla con los productos restantes
+              obtenerProductos();
+            } else {
+              console.log('Error al eliminar el producto:', data.errorMessages);
             }
-        });
+          })
+          .catch(error => {
+            console.log('Error:', error);
+          });
+      }
+    }
 
-        // Agregar producto
-        $('#addProductButton').click(function () {
-            // Realizar acciones necesarias para agregar un nuevo producto
-            console.log('Agregar nuevo producto.');
-        });
+    // Inicializar la página
+    function inicializar() {
+      obtenerProductos();
+    }
 
-        // Editar producto
-        function editProduct(productId) {
-            // Realizar acciones necesarias para editar el producto con el ID especificado
-            console.log('Editar producto con ID: ' + productId);
-        }
-
-        // Eliminar producto
-        function deleteProduct(productId) {
-            // Realizar acciones necesarias para eliminar el producto con el ID especificado
-            console.log('Eliminar producto con ID: ' + productId);
-        }
-
-    </script>
+    window.addEventListener('DOMContentLoaded', inicializar);
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container mt-5">
+        <h1>CRUD de Productos</h1>
+
+        <!-- Tabla para mostrar los productos -->
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Código de Barras</th>
+                    <th>Número de Serie</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Precio</th>
+                    <th>Impuestos</th>
+                    <th>Descuento</th>
+                    <th>Imagen</th>
+                    <th>Stock</th>
+                    <th>Fecha de Creación</th>
+                    <th>Fecha de Actualización</th>
+                    <th>Categoría</th>
+                    <th>Marca</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="productosTableBody">
+                <!-- Los productos se cargarán dinámicamente aquí -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Ventana emergente para editar productos -->
+    <div class="modal fade" id="editarProductoModal" tabindex="-1" aria-labelledby="editarProductoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editarProductoModalLabel">Editar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="editarProductoForm">
+                        <input type="hidden" id="productoId" value="">
+                        <div class="mb-3">
+                            <label for="codigoBarras" class="form-label">Código de Barras</label>
+                            <input type="text" class="form-control" id="codigoBarras" placeholder="Código de Barras"
+                                readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="numSerie" class="form-label">Número de Serie</label>
+                            <input type="text" class="form-control" id="numSerie" placeholder="Número de Serie"
+                                readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombreProducto" class="form-label">Nombre</label>
+                            <input type="text" class="form-control" id="nombreProducto" placeholder="Nombre">
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" placeholder="Descripción">
+                        </div>
+                        <div class="mb-3">
+                            <label for="precio" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="precio" placeholder="Precio">
+                        </div>
+                        <div class="mb-3">
+                            <label for="descuento" class="form-label">Descuento</label>
+                            <input type="number" class="form-control" id="descuento" placeholder="Descuento">
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagenProducto" class="form-label">Imagen</label>
+                            <input type="text" class="form-control" id="imagenProducto" placeholder="URL de la imagen">
+                        </div>
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="stock" placeholder="Stock">
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoria" class="form-label">Categoría</label>
+                            <select class="form-select" id="categoria">
+                                <!-- Las categorías se cargarán dinámicamente aquí -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="marca" class="form-label">Marca</label>
+                            <select class="form-select" id="marca">
+                                <!-- Las marcas se cargarán dinámicamente aquí -->
+                            </select>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="guardarCambios()">Guardar</button>
+                </div>
+                <div id="errorMessage" style="display: none; color: red;"></div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Obtener la lista de productos desde la API
+        function obtenerProductos() {
+            fetch('https://localhost:7292/api/Producto')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        const productosTableBody = document.getElementById('productosTableBody');
+                        productosTableBody.innerHTML = ''; // Limpiar la tabla antes de agregar los productos
+
+                        data.resultado.forEach(producto => {
+                            const row = `
+                <tr>
+                  <td>${producto.idProducto}</td>
+                  <td>${producto.codigoBarras}</td>
+                  <td>${producto.numSerie}</td>
+                  <td>${producto.nombreProducto}</td>
+                  <td>${producto.descripcion}</td>
+                  <td>${producto.precio}</td>
+                  <td>${producto.impuestos}</td>
+                  <td>${producto.descuento}</td>
+                  <td>${producto.imagenProducto}</td>
+                  <td>${producto.stock}</td>
+                  <td>${producto.fechaCreacion}</td>
+                  <td>${producto.fechaActualizacion}</td>
+                  <td>${producto.categoria.nombreCategoria}</td>
+                  <td>${producto.marca.nombreMarca}</td>
+                  <td>
+                    <button class="btn btn-sm btn-danger" onclick="eliminarProducto(${producto.idProducto})">Eliminar</button>
+                    <button class="btn btn-sm btn-primary" onclick="editarProducto(${producto.idProducto})">Editar</button>
+                  </td>
+                </tr>
+              `;
+
+                            productosTableBody.innerHTML += row;
+                        });
+                    } else {
+                        console.log('La respuesta de la API no contiene datos válidos:', data);
+                    }
+                })
+        }
+
+        function obtenerMarcas() {
+            fetch('https://localhost:7292/api/Marca')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        const marcaSelect = document.getElementById('marca');
+                        marcaSelect.innerHTML = ''; // Limpiar las opciones antes de agregar las marcas
+
+                        data.resultado.forEach(marca => {
+                            const option = document.createElement('option');
+                            option.value = marca.idMarca;
+                            option.textContent = marca.nombreMarca;
+                            marcaSelect.appendChild(option);
+                        });
+                    } else {
+                        console.log('La respuesta de la API no contiene datos válidos:', data);
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+
+        function obtenerCategorias() {
+            fetch('https://localhost:7292/api/Categoria')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        const categoriaSelect = document.getElementById('categoria');
+                        categoriaSelect.innerHTML = ''; // Limpiar las opciones antes de agregar las categorías
+
+                        data.resultado.forEach(categoria => {
+                            const option = document.createElement('option');
+                            option.value = categoria.idCategoria;
+                            option.textContent = categoria.nombreCategoria;
+                            categoriaSelect.appendChild(option);
+                        });
+                    } else {
+                        console.log('La respuesta de la API no contiene datos válidos:', data);
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+
+        // Editar un producto por ID
+        function editarProducto(idProducto) {
+            // Obtener el producto desde la API https://localhost:7292/api/Producto/
+            fetch(`https://localhost:7292/api/Producto/${idProducto}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        const producto = data.resultado;
+
+                        // Rellenar los campos del formulario de edición
+                        document.getElementById('productoId').value = producto.idProducto;
+                        document.getElementById('codigoBarras').value = producto.codigoBarras;
+                        document.getElementById('numSerie').value = producto.numSerie;
+                        document.getElementById('nombreProducto').value = producto.nombreProducto;
+                        document.getElementById('descripcion').value = producto.descripcion;
+                        document.getElementById('precio').value = producto.precio;
+                        document.getElementById('descuento').value = producto.descuento;
+                        document.getElementById('imagenProducto').value = producto.imagenProducto;
+                        document.getElementById('stock').value = producto.stock;
+
+                        // Seleccionar la opción de categoría correspondiente
+                        const categoriaSelect = document.getElementById('categoria');
+                        const categoriaOption = Array.from(categoriaSelect.options).find(option => {
+                            if (producto.categoriaId !== undefined) {
+                                return option.value === producto.categoriaId.toString();
+                            }
+                            return false;
+                        });
+
+
+                        // Seleccionar la opción```
+                        // de marca correspondiente
+                        const marcaSelect = document.getElementById('marca');
+                        const marcaOption = Array.from(marcaSelect.options).find(option => {
+                            if (producto.marcaId !== undefined) {
+                                return option.value === producto.marcaId.toString();
+                            }
+                            return false;
+                        });
+
+
+                        // Mostrar la ventana emergente de edición
+                        const editarProductoModal = new bootstrap.Modal(document.getElementById('editarProductoModal'));
+                        editarProductoModal.show();
+                    } else {
+                        console.log('Error al obtener el producto:', data.errorMessages);
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+
+        // Guardar los cambios del producto editado
+        function guardarCambios() {
+            const idProducto = document.getElementById('productoId').value;
+            const nombreProducto = document.getElementById('nombreProducto').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const precio = document.getElementById('precio').value;
+            const descuento = document.getElementById('descuento').value;
+            const imagenProducto = document.getElementById('imagenProducto').value;
+            const stock = document.getElementById('stock').value;
+            const categoriaId = document.getElementById('categoria').value;
+            const marcaId = document.getElementById('marca').value;
+
+            const producto = {
+                idProducto: parseInt(idProducto),
+                codigoBarras: '',
+                numSerie: '',
+                nombreProducto: nombreProducto,
+                descripcion: descripcion,
+                precio: parseFloat(precio),
+                descuento: parseFloat(descuento),
+                imagenProducto: imagenProducto,
+                stock: parseInt(stock),
+                categoriaId: parseInt(categoriaId),
+                marcaId: parseInt(marcaId)
+            };
+
+            fetch(`https://localhost:7292/api/Producto/${idProducto}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(producto)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        // Actualizar la tabla con los productos actualizados
+                        obtenerProductos();
+                        // Cerrar la ventana emergente de edición
+                        const editarProductoModal = new bootstrap.Modal(document.getElementById('editarProductoModal'));
+                        editarProductoModal.hide();
+                    } else {
+                        const errorMessage = data.errorMessages || 'Se produjo un error al guardar los cambios del producto.';
+                        console.log('Error al guardar los cambios del producto:', errorMessage);
+                        // Mostrar el mensaje de error en algún lugar visible para el usuario
+                        const errorElement = document.getElementById('errorMessage');
+                        errorElement.textContent = 'Error al guardar los cambios del producto: ' + errorMessage;
+                        errorElement.style.display = 'block';
+                    }
+                })
+                .catch(error => {
+                    console.log('Error:', error);
+                });
+        }
+
+
+        // Inicializar la página
+        function inicializar() {
+            obtenerProductos();
+            obtenerCategorias();
+            obtenerMarcas();
+        }
+
+        window.addEventListener('DOMContentLoaded', inicializar);
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
