@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Plantilla de venta de comida</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+  <style>
+    /* Estilos personalizados relacionados con la comida */
+    body {
+      background-color: #F5F5F5;
+    }
+    .navbar {
+      background-color: #E91E63;
+      color: #FFF;
+    }
+    .sidebar {
+      background-color: #FF4081;
+      color: #FFF;
+      padding: 20px;
+    }
+    .category {
+      background-color: #FF80AB;
+      color: #FFF;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Barra de navegación -->
+  <nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand" href="#">Mi Tienda de Comida</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="#">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Categoría 1</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Categoría 2</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Categoría 3</a>
+        </li>
+      </ul>
+      <form class="form-inline ml-auto">
+        <input class="form-control mr-sm-2" type="search" placeholder="Buscar" aria-label="Search">
+        <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Buscar</button>
+      </form>
+    </div>
+  </nav>
+
+  <!-- Contenido principal -->
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-lg-3 sidebar">
+        <h3>Categorías</h3>
+        <div class="category">Categoría 1</div>
+        <div class="category">Categoría 2</div>
+        <div class="category">Categoría 3</div>
+      </div>
+      
+      <!-- Productos -->
+      <div class="col-lg-9">
+        <h2>Productos</h2>
+        <div id="product-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+  <script>
+    // Lógica dinámica para mostrar los productos desde la API
+    fetch('https://api.example.com/products')
+      .then(response => response.json())
+      .then(data => {
+        const productContainer = document.getElementById('product-list');
+        data.forEach(product => {
+          const productCard = document.createElement('div');
+          productCard.classList.add('card');
+          // Aquí puedes construir el contenido de cada tarjeta de producto según la estructura necesaria
+          // Puedes usar DOM manipulation o plantillas HTML para ello
+          productContainer.appendChild(productCard);
+        });
+      });
+  </script>
+</body>
+</html>

@@ -122,7 +122,10 @@
                         <h1>CRUD de Productos</h1>
                         <a href="/prototipo3/aggProducto.html"><input type="button" class="btn btn-outline-primary"
                                 value="Agregar Producto"></a>
-                        <a href="#" class="btn btn-sm btn-success" onclick="agregarProducto()">Agregar</a>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#agregarProductoModal">
+                            Agregar Producto
+                        </button>
                         <!-- Tabla para mostrar los productos -->
                         <div class="table-responsive">
                             <table class="table table-dark table-striped">
@@ -150,7 +153,7 @@
         </div>
     </div>
 
-    <!-- Ventana emergente para editar/agregar productos -->
+    <!-- Ventana emergente para editar productos -->
     <div class="modal fade" id="editarProductoModal" tabindex="-1" aria-labelledby="editarProductoModalLabel"
         aria-hidden="true">
         <div class="modal-dialog">
@@ -216,7 +219,71 @@
             </div>
         </div>
     </div>
-
+    <!--ventana emergente-->
+    <div class="modal fade" id="agregarProductoModal" tabindex="-1" aria-labelledby="agregarProductoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="agregarProductoModalLabel">Agregar Producto</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="agregarProductoForm">
+                        <!-- Campos del formulario para agregar productos -->
+                        <div class="mb-3">
+                            <label for="codigoBarras" class="form-label">Código de Barras</label>
+                            <input type="text" class="form-control" id="codigoBarras" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="numSerie" class="form-label">Número de Serie</label>
+                            <input type="text" class="form-control" id="numSerie" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nombreProducto" class="form-label">Nombre del Producto</label>
+                            <input type="text" class="form-control" id="nombreProducto" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="descripcion" class="form-label">Descripción</label>
+                            <input type="text" class="form-control" id="descripcion" placeholder="Descripción">
+                        </div>
+                        <div class="mb-3">
+                            <label for="precio" class="form-label">Precio</label>
+                            <input type="number" class="form-control" id="precio" placeholder="Precio">
+                        </div>
+                        <div class="mb-3">
+                            <label for="descuento" class="form-label">Descuento</label>
+                            <input type="number" class="form-control" id="descuento" placeholder="Descuento">
+                        </div>
+                        <div class="mb-3">
+                            <label for="imagenProducto" class="form-label">Imagen</label>
+                            <input type="text" class="form-control" id="imagenProducto" placeholder="URL de la imagen">
+                        </div>
+                        <div class="mb-3">
+                            <label for="stock" class="form-label">Stock</label>
+                            <input type="number" class="form-control" id="stock" placeholder="Stock">
+                        </div>
+                        <div class="mb-3">
+                            <label for="categoriaId" class="form-label">Categoría</label>
+                            <select class="form-select" id="categoriaId" required>
+                                <!-- Opciones de categoría generadas dinámicamente -->
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="marcaId" class="form-label">Marca</label>
+                            <select class="form-select" id="marcaId" required>
+                                <!-- Opciones de marca generadas dinámicamente -->
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarProducto()">Agregar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // Obtener la lista de productos desde la API
@@ -427,23 +494,154 @@
                     console.log('Error:', error);
                 });
         }
-        function agregarProducto() {
-            // Limpiar los campos del formulario de edición
-            document.getElementById('productoId').value = '';
-            document.getElementById('codigoBarras').value = '';
-            document.getElementById('numSerie').value = '';
-            document.getElementById('nombreProducto').value = '';
-            document.getElementById('descripcion').value = '';
-            document.getElementById('precio').value = '';
-            document.getElementById('descuento').value = '';
-            document.getElementById('imagenProducto').value = '';
-            document.getElementById('stock').value = '';
-            document.getElementById('categoria').selectedIndex = 0;
-            document.getElementById('marca').selectedIndex = 0;
+        //agregar productos
+        document.addEventListener('DOMContentLoaded', function () {
+            obtenerCategorias();
+            obtenerMarcas();
+        });
 
-            // Mostrar la ventana emergente de agregar producto
-            const editarProductoModal = new bootstrap.Modal(document.getElementById('editarProductoModal'));
-            editarProductoModal.show();
+        function obtenerCategorias() {
+            fetch('https://localhost:7292/api/Categoria')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        const categorias = data.resultado;
+                        const categoriaIdSelect = document.getElementById('categoriaId');
+                        categorias.forEach(categoria => {
+                            const option = document.createElement('option');
+                            option.value = categoria.idCategoria;
+                            option.text = categoria.nombreCategoria;
+                            categoriaIdSelect.appendChild(option);
+                        });
+                    } else {
+                        console.log('Error al obtener las categorías:', data.errorMessages);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+
+        function obtenerMarcas() {
+            fetch('https://localhost:7292/api/Marca')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        const marcas = data.resultado;
+                        const marcaIdSelect = document.getElementById('marcaId');
+                        marcas.forEach(marca => {
+                            const option = document.createElement('option');
+                            option.value = marca.idMarca;
+                            option.text = marca.nombreMarca;
+                            marcaIdSelect.appendChild(option);
+                        });
+                    } else {
+                        console.log('Error al obtener las marcas:', data.errorMessages);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+        }
+        function generarOpcionesCategorias(categorias) {
+            const selectCategoria = document.getElementById('categoriaId');
+
+            // Limpiar opciones existentes
+            selectCategoria.innerHTML = '';
+
+            // Generar opciones
+            categorias.forEach(categoria => {
+                const option = document.createElement('option');
+                option.value = categoria.idCategoria;
+                option.textContent = categoria.nombreCategoria;
+
+                // Verificar si la opción ya existe en el select
+                const optionExistente = Array.from(selectCategoria.options).find(opt => opt.value === option.value);
+                if (!optionExistente) {
+                    selectCategoria.appendChild(option);
+                }
+            });
+        }
+
+        function generarOpcionesMarcas(marcas) {
+            const selectMarca = document.getElementById('marcaId');
+
+            // Limpiar opciones existentes
+            selectMarca.innerHTML = '';
+
+            // Generar opciones
+            marcas.forEach(marca => {
+                const option = document.createElement('option');
+                option.value = marca.idMarca;
+                option.textContent = marca.nombreMarca;
+
+                // Verificar si la opción ya existe en el select
+                const optionExistente = Array.from(selectMarca.options).find(opt => opt.value === option.value);
+                if (!optionExistente) {
+                    selectMarca.appendChild(option);
+                }
+            });
+        }
+
+        function agregarProducto() {
+            // Obtener los valores de los campos del formulario
+            const codigoBarras = document.getElementById('codigoBarras').value;
+            const numSerie = document.getElementById('numSerie').value;
+            const nombreProducto = document.getElementById('nombreProducto').value;
+            const descripcion = document.getElementById('descripcion').value;
+            const precio = parseFloat(document.getElementById('precio').value);
+            const descuento = parseFloat(document.getElementById('descuento').value);
+            const imagenProducto = document.getElementById('imagenProducto').value;
+            const stock = parseInt(document.getElementById('stock').value);
+            const categoriaId = parseInt(document.getElementById('categoriaId').value);
+            const marcaId = parseInt(document.getElementById('marcaId').value);
+
+            // Crear el objeto de producto con los valores ingresados
+            const producto = {
+                codigoBarras: codigoBarras,
+                numSerie: numSerie,
+                nombreProducto: nombreProducto,
+                descripcion: descripcion,
+                precio: precio,
+                descuento: descuento,
+                imagenProducto: imagenProducto,
+                stock: stock,
+                categoriaId: categoriaId,
+                marcaId: marcaId
+            };
+
+            // Realizar la petición POST para agregar el producto a la API
+            fetch('https://localhost:7292/api/Producto', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(producto)
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.isExistoso) {
+                        alert('Producto agregado exitosamente');
+                        // Limpiar los campos del formulario
+                        document.getElementById('codigoBarras').value = '';
+                        document.getElementById('numSerie').value = '';
+                        document.getElementById('nombreProducto').value = '';
+                        document.getElementById('descripcion').value = '';
+                        document.getElementById('precio').value = '';
+                        document.getElementById('descuento').value = '';
+                        document.getElementById('imagenProducto').value = '';
+                        document.getElementById('stock').value = '';
+                        // Cerrar la ventana emergente
+                        const agregarProductoModal = new bootstrap.Modal(document.getElementById('agregarProductoModal'));
+                        agregarProductoModal.hide();
+                    } else {
+                        alert('Error al agregar el producto');
+                        console.log('Error:', data.errorMessages);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
         }
 
 
