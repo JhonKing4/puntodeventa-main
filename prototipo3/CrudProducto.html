@@ -494,74 +494,7 @@
                     console.log('Error:', error);
                 });
         }
-        //agregar productos
-        document.addEventListener('DOMContentLoaded', function () {
-            obtenerCategorias();
-            obtenerMarcas();
-        });
-
-        function obtenerCategorias() {
-            fetch('https://localhost:7292/api/Categoria')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.isExistoso) {
-                        const categorias = data.resultado;
-                        const categoriaIdSelect = document.getElementById('categoriaId');
-                        categorias.forEach(categoria => {
-                            const option = document.createElement('option');
-                            option.value = categoria.idCategoria;
-                            option.text = categoria.nombreCategoria;
-                            categoriaIdSelect.appendChild(option);
-                        });
-                    } else {
-                        console.log('Error al obtener las categorías:', data.errorMessages);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
-        function obtenerMarcas() {
-            fetch('https://localhost:7292/api/Marca')
-                .then(response => response.json())
-                .then(data => {
-                    if (data.isExistoso) {
-                        const marcas = data.resultado;
-                        const marcaIdSelect = document.getElementById('marcaId');
-                        marcas.forEach(marca => {
-                            const option = document.createElement('option');
-                            option.value = marca.idMarca;
-                            option.text = marca.nombreMarca;
-                            marcaIdSelect.appendChild(option);
-                        });
-                    } else {
-                        console.log('Error al obtener las marcas:', data.errorMessages);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-        function generarOpcionesCategorias(categorias) {
-            const selectCategoria = document.getElementById('categoriaId');
-
-            // Limpiar opciones existentes
-            selectCategoria.innerHTML = '';
-
-            // Generar opciones
-            categorias.forEach(categoria => {
-                const option = document.createElement('option');
-                option.value = categoria.idCategoria;
-                option.textContent = categoria.nombreCategoria;
-
-                // Verificar si la opción ya existe en el select
-                const optionExistente = Array.from(selectCategoria.options).find(opt => opt.value === option.value);
-                if (!optionExistente) {
-                    selectCategoria.appendChild(option);
-                }
-            });
-        }
+        
 
         function generarOpcionesMarcas(marcas) {
             const selectMarca = document.getElementById('marcaId');
@@ -582,68 +515,6 @@
                 }
             });
         }
-
-        function agregarProducto() {
-            // Obtener los valores de los campos del formulario
-            const codigoBarras = document.getElementById('codigoBarras').value;
-            const numSerie = document.getElementById('numSerie').value;
-            const nombreProducto = document.getElementById('nombreProducto').value;
-            const descripcion = document.getElementById('descripcion').value;
-            const precio = parseFloat(document.getElementById('precio').value);
-            const descuento = parseFloat(document.getElementById('descuento').value);
-            const imagenProducto = document.getElementById('imagenProducto').value;
-            const stock = parseInt(document.getElementById('stock').value);
-            const categoriaId = parseInt(document.getElementById('categoriaId').value);
-            const marcaId = parseInt(document.getElementById('marcaId').value);
-
-            // Crear el objeto de producto con los valores ingresados
-            const producto = {
-                codigoBarras: codigoBarras,
-                numSerie: numSerie,
-                nombreProducto: nombreProducto,
-                descripcion: descripcion,
-                precio: precio,
-                descuento: descuento,
-                imagenProducto: imagenProducto,
-                stock: stock,
-                categoriaId: categoriaId,
-                marcaId: marcaId
-            };
-
-            // Realizar la petición POST para agregar el producto a la API
-            fetch('https://localhost:7292/api/Producto', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(producto)
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.isExistoso) {
-                        alert('Producto agregado exitosamente');
-                        // Limpiar los campos del formulario
-                        document.getElementById('codigoBarras').value = '';
-                        document.getElementById('numSerie').value = '';
-                        document.getElementById('nombreProducto').value = '';
-                        document.getElementById('descripcion').value = '';
-                        document.getElementById('precio').value = '';
-                        document.getElementById('descuento').value = '';
-                        document.getElementById('imagenProducto').value = '';
-                        document.getElementById('stock').value = '';
-                        // Cerrar la ventana emergente
-                        const agregarProductoModal = new bootstrap.Modal(document.getElementById('agregarProductoModal'));
-                        agregarProductoModal.hide();
-                    } else {
-                        alert('Error al agregar el producto');
-                        console.log('Error:', data.errorMessages);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
-        }
-
 
         // Inicializar la página
         function inicializar() {

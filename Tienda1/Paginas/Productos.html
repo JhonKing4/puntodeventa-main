@@ -34,22 +34,86 @@
         color: white;
     }
 
-    /* Estilos personalizados */
-    .carousel-item img {
-        height: 400px;
-        object-fit: cover;
+    .container {
+        margin-top: 20px;
     }
 
-    .card {
-        transition: transform 0.3s;
+    .sidebar {
+        background-color: #f9f9f9;
+        padding: 20px;
     }
 
-    .card:hover {
-        transform: scale(1.05);
+    .sidebar h4,
+    .sidebar h5 {
+        margin-bottom: 10px;
     }
+
+    .productos-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+
+    .producto-item {
+        width: calc(33.33% - 20px);
+        padding: 10px;
+        border: 1px solid #ccc;
+        background-color: #fff;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+        transition: all 0.3s ease;
+    }
+
+    .producto-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .producto-imagen-container {
+        position: relative;
+        width: 100%;
+        padding-bottom: 100%;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
     .producto-imagen {
-        height: 250px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
+    }
+
+    .producto-titulo {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+
+    .producto-precio {
+        margin-top: 5px;
+    }
+
+    .producto-enlace {
+        margin-top: 10px;
+    }
+
+    /* Estilos para los filtros de marca y categoría */
+    .form-check {
+        margin-bottom: 10px;
+    }
+
+    /* Estilos para el rango de precio */
+    #filtroPrecio input {
+        width: 50%;
+        margin-bottom: 5px;
+    }
+
+    #btnFiltrarPrecio {
+        display: block;
+        width: 100%;
     }
 </style>
 
@@ -64,8 +128,9 @@
                 <a class="navbar-brand">Navbar</a>
 
                 <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                    <li><a href="/Tienda1/Paginas/index.html" class="nav-link px-2 text-secondary">Home</a></li>
-                    <li><a href="/Tienda1/Paginas/Productos.html" class="nav-link px-2 text-white">Productos</a></li>
+                    <li><a href="/Tienda1/Paginas/index.html" class="nav-link px-2 text-white">Home</a></li>
+                    <li><a href="/Tienda1/Paginas/Productos.html" class="nav-link px-2  text-secondary">Productos</a>
+                    </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdown" role="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
@@ -89,7 +154,64 @@
         </div>
     </nav>
     <main>
+        <!-- Seccion de filtros -->
+        <!-- <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="sidebar">
+                        <h4>Filtrar por:</h4>
+                        <h6>Marcas:</h6>
+                        <div id="filtroMarca">
+                             Las marcas se generarán dinámicamente con JavaScript 
+                        </div>
+                        <h6>Categorías:</h6>
+                        <div id="filtroCategoria">
 
+                             Las categorías se generarán dinámicamente con JavaScript 
+                        </div>
+                        <div id="filtroPrecio">
+                            <h5>Rango de Precio:</h5>
+                            <input type="text" id="minPrecio" placeholder="Mínimo">
+                            <input type="text" id="maxPrecio" placeholder="Máximo">
+                            <button id="btnFiltrarPrecio">Filtrar</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row productos-container" id="productosContainer">
+                         Los productos se generarán dinámicamente con JavaScript 
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="sidebar">
+                        <h3>Marca:</h3>
+                        <div id="filtroMarca"></div>
+                        <h3>Categoría</h3>
+                        <div id="filtroCategoria"></div>
+                        <h3>Precio</h3>
+                        <div class="form-group">
+                            <label for="minPrecio">Precio Mínimo:</label>
+                            <input type="number" id="minPrecio" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="maxPrecio">Precio Máximo:</label>
+                            <input type="number" id="maxPrecio" class="form-control">
+                        </div>
+                        <br>
+                        <button id="btnFiltrar" class="btn btn-primary">Filtrar</button>
+                    </div>
+                </div>
+                <div class="col-md-9">
+                    <div class="row productos-container" id="productosContainer">
+                         <!-- Los productos se generarán dinámicamente con JavaScript  -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
     <footer class="bg-dark text-white text-center py-3">

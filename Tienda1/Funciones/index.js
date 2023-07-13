@@ -49,7 +49,7 @@ $(document).ready(function() {
           var cardBody = $('<div>').addClass('card-body');
           var titulo = $('<h5>').addClass('card-title').text(producto.nombreProducto);
           var precio = $('<p>').addClass('card-text').text('$' + producto.precio.toFixed(2));
-          var enlace = $('<a>').addClass('btn btn-primary').attr('href', '#').text('Ver Detalles');
+          var enlace = $('<a>').addClass('btn btn-primary w-100').attr('href', 'detalle-producto.html?id=' + producto.idProducto).text('Ver Detalles');
   
           cardBody.append(titulo, precio, enlace);
           card.append(imagen, cardBody);
